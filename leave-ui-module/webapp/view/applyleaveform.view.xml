@@ -1,0 +1,84 @@
+<mvc:View
+    controllerName="employeeleave.leaveuimodule.controller.applyleaveform"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    displayBlock="true">
+
+    <Page title="Employee Leave Application">
+
+        <content>
+            <VBox
+                class="sapUiMediumMargin"
+                width="auto">
+
+                <Title
+                    text="Apply for Leave"
+                    level="H2"
+                    class="sapUiSmallMarginBottom"/>
+
+                <Label text="Employee ID" />
+                <Input
+                    id="employeeId"
+                    placeholder="Enter Employee ID"
+                    type="Number"
+                    class="sapUiSmallMarginBottom"/>
+
+                <Label text="Employee Name" />
+                <Input
+                    id="employeeName"
+                    placeholder="Enter Employee Name"
+                    class="sapUiSmallMarginBottom"/>
+
+                <Label text="Email" />
+                <Input
+                    id="email"
+                    placeholder="Enter Email Address"
+                    type="Email"
+                    class="sapUiSmallMarginBottom"/>
+
+                <Label text="Starting Date" />
+                <DatePicker
+                    id="startingDate"
+                    placeholder="Select starting date"
+                    displayFormat="yyyy-MM-dd"
+                    valueFormat="yyyy-MM-dd"
+                    class="sapUiSmallMarginBottom"/>
+
+                <Label text="Ending Date" />
+                <DatePicker
+                    id="endingDate"
+                    placeholder="Select ending date"
+                    displayFormat="yyyy-MM-dd"
+                    valueFormat="yyyy-MM-dd"
+                    class="sapUiSmallMarginBottom"
+                    change="onEndDateChange"/>
+
+                <Label text="Number of Leave Days" />
+                <Input
+                    id="noOfDate"
+                    placeholder="Leave days"
+                    type="Number"
+                    editable="false"
+                    class="sapUiSmallMarginBottom"/>
+
+                <Label text="Reason" />
+                <TextArea
+                    id="reason"
+                    placeholder="Enter reason for leave"
+                    rows="4"
+                    width="100%"
+                    class="sapUiSmallMarginBottom"/>
+
+                <Button
+                    text="Apply Leave"
+                    type="Emphasized"
+                    icon="sap-icon://accept"
+                    press="startWorkflowInstance"
+                    class="sapUiSmallMarginTop"/>
+
+            </VBox>
+        </content>
+
+    </Page>
+
+</mvc:View>

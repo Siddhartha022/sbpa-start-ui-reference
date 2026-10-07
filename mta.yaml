@@ -1,0 +1,92 @@
+_schema-version: "3.2"
+ID: employeeleaveapply
+version: 0.0.1
+modules:
+- name: employeeleaveapply-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: employeeleaveapply-destination-service
+    parameters:
+      content-target: true
+  - name: employeeleaveapply_html_repo_host
+    parameters:
+      service-key:
+        name: employeeleaveapply_html_repo_host-key
+  - name: uaa_employeeleaveapply
+    parameters:
+      service-key:
+        name: uaa_employeeleaveapply-key
+  parameters:
+    content:
+      subaccount:
+        destinations:
+        - Name: leaverequest_employeeleaveapply_html_repo_host
+          ServiceInstanceName: employeeleaveapply-html5-app-host-service
+          ServiceKeyName: employeeleaveapply_html_repo_host-key
+          sap.cloud.service: leaverequest
+        - Authentication: OAuth2UserTokenExchange
+          Name: leaverequest_uaa_employeeleaveapply
+          ServiceInstanceName: employeeleaveapply-xsuaa-service
+          ServiceKeyName: uaa_employeeleaveapply-key
+          sap.cloud.service: leaverequest
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+- name: employeeleaveapply-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: employeeleaveapply_html_repo_host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - employeeleaveleaveuimodule.zip
+      name: employeeleaveleaveuimodule
+      target-path: resources/
+- name: employeeleaveleaveuimodule
+  type: html5
+  path: leave-ui-module
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: employeeleaveapply-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        subaccount:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: employeeleaveapply-destination-service
+    service-plan: lite
+- name: employeeleaveapply_html_repo_host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: employeeleaveapply-html5-app-host-service
+    service-plan: app-host
+- name: uaa_employeeleaveapply
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: employeeleaveapply-xsuaa-service
+    service-plan: application
+parameters:
+  deploy_mode: html5-repo
